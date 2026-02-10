@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#e91e63">
+    <title>Paiement Formation - Beauté Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e91e63;
+            --primary-light: #f48fb1;
+            --primary-dark: #c2185b;
+            --secondary: #7b1fa2;
+            --paypal: #003087;
+            --paypal-light: #009cde;
+            --success: #4caf50;
+            --border-radius: 10px;
+            --border-radius-round: 12px;
+            --box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            --box-shadow-hover: 0 5px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.2s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .payment-container {
+            width: 100%;
+            max-width: 380px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(233, 30, 99, 0.12);
+            border: 1px solid var(--primary-light);
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Header */
+        .payment-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 16px;
+            text-align: center;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .payment-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        
+        .payment-title h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        
+        .payment-title i {
+            font-size: 20px;
+        }
+        
+        .payment-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        /* Bouton Retour */
+        .payment-retour {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .payment-retour:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+        
+        /* Content */
+        .payment-content {
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        /* Message principal */
+        .main-message {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .message-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+        
+        /* Bouton PayPal */
+        .paypal-btn-container {
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .paypal-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--paypal), var(--paypal-light));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-round);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            max-width: 260px;
+            width: 100%;
+        }
+        
+        .paypal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow-hover);
+            background: linear-gradient(135deg, #002f83, #0088cc);
+        }
+        
+        .paypal-btn i {
+            font-size: 18px;
+        }
+        
+        /* Bouton Retour Accueil */
+        .home-btn-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-round);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            max-width: 220px;
+            width: 100%;
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow-hover);
+            background: linear-gradient(135deg, var(--primary-dark), #6a1b9a);
+        }
+        
+        .home-btn i {
+            font-size: 16px;
+        }
+        
+        /* Instructions */
+        .instructions {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+        
+        /* Footer */
+        .payment-footer {
+            text-align: center;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary-dark));
+            color: white;
+            font-size: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-logo {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: #f48fb1;
+        }
+        
+        /* Version mobile */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+            
+            .payment-container {
+                max-width: 100%;
+                border-radius: 14px;
+            }
+            
+            .payment-header {
+                padding: 18px 14px;
+            }
+            
+            .payment-title h1 {
+                font-size: 16px;
+            }
+            
+            .payment-content {
+                padding: 25px 16px;
+            }
+            
+            .paypal-btn {
+                padding: 13px 24px;
+                font-size: 14px;
+                max-width: 240px;
+            }
+            
+            .home-btn {
+                padding: 11px 20px;
+                font-size: 13px;
+                max-width: 200px;
+            }
+            
+            .payment-retour {
+                top: 12px;
+                left: 12px;
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .paypal-btn {
+                padding: 12px 20px;
+                font-size: 13px;
+                max-width: 220px;
+            }
+            
+            .home-btn {
+                padding: 10px 18px;
+                font-size: 12px;
+                max-width: 180px;
+            }
+            
+            .payment-title h1 {
+                font-size: 15px;
+            }
+            
+            .payment-subtitle {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <!-- Bouton Retour -->
+        <button class="payment-retour" onclick="goToHomePage()" title="Retour boutique">
+            <i class="fas fa-store"></i>
+        </button>
+
+        <!-- Header -->
+        <header class="payment-header">
+            <div class="payment-title">
+                <i class="fas fa-credit-card"></i>
+                <h1>Paiement Formation</h1>
+            </div>
+            <p class="payment-subtitle">Beauté Pro</p>
+        </header>
+        
+        <!-- Contenu Principal -->
+        <main class="payment-content">
+            <!-- Message principal -->
+            <div class="main-message">
+                <p class="message-text">
+                    Pour effectuer un paiement de formation,<br>
+                    cliquez sur le bouton ci-dessous.
+                </p>
+            </div>
+            
+            <!-- Bouton PayPal -->
+            <div class="paypal-btn-container">
+                <button class="paypal-btn" id="paypal-btn">
+                    <i class="fab fa-paypal"></i>
+                    Payer avec PayPal
+                </button>
+            </div>
+            
+            <!-- Bouton Retour Accueil -->
+            <div class="home-btn-container">
+                <button class="home-btn" onclick="goToHomePage()">
+                    <i class="fas fa-home"></i>
+                    Retour à l'accueil
+                </button>
+            </div>
+            
+            <!-- Instructions -->
+            <p class="instructions">
+                <i class="fas fa-info-circle"></i> 
+                Vous serez redirigé vers PayPal pour finaliser le paiement
+            </p>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="payment-footer">
+            <div class="footer-logo">
+                <i class="fas fa-spa"></i>
+            </div>
+            <p>© 2026 Beauté Pro</p>
+            <p style="margin-top: 4px; font-size: 9px; opacity: 0.9;">
+                Paiements sécurisés
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Configuration
+        const PAYPAL_ME_LINK = "https://paypal.me/awallymua";
+        const HOME_PAGE_URL = "https://boutique-awa.netlify.app/";
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Bouton PayPal
+            document.getElementById('paypal-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                startPaymentProcess();
+            });
+        }
+
+        function startPaymentProcess() {
+            // Ouvrir PayPal dans un nouvel onglet
+            const paypalWindow = window.open(PAYPAL_ME_LINK, '_blank', 'noopener,noreferrer');
+            
+            if (!paypalWindow) {
+                showNotification("Veuillez autoriser les popups pour PayPal", "error");
+                return;
+            }
+            
+            // Afficher notification
+            showNotification("Redirection vers PayPal...", "info");
+        }
+
+        function goToHomePage() {
+            // Rediriger vers la boutique
+            window.location.href = HOME_PAGE_URL;
+        }
+
+        function showNotification(message, type) {
+            // Supprimer les anciennes notifications
+            document.querySelectorAll('.notification').forEach(n => n.remove());
+            
+            // Créer la notification
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            const colors = {
+                success: '#4CAF50',
+                error: '#F44336',
+                info: '#2196F3',
+                warning: '#FF9800'
+            };
+            
+            notification.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 15px;
+                    right: 15px;
+                    left: 15px;
+                    max-width: 300px;
+                    margin: 0 auto;
+                    padding: 12px 16px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 600;
+                    font-size: 13px;
+                    z-index: 1500;
+                    animation: slideDown 0.3s ease;
+                    background: ${colors[type] || colors.info};
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    border-left: 4px solid rgba(255,255,255,0.3);
+                    text-align: center;
+                ">
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Supprimer après 3 secondes
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+            
+            // Ajouter les animations CSS si nécessaire
+            if (!document.querySelector('#notif-anim')) {
+                const style = document.createElement('style');
+                style.id = 'notif-anim';
+                style.textContent = `
+                    @keyframes slideDown {
+                        from { transform: translateY(-60px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                    @keyframes slideUp {
+                        from { transform: translateY(0); opacity: 1; }
+                        to { transform: translateY(-60px); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+    </script>
+</body>
+</html>
